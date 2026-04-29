@@ -389,5 +389,189 @@
         "answer": 2
       }
     ]
+  },
+  {
+    "id": "18_component_scan",
+    "bin": "18_component_scan",
+    "topic": "beans",
+    "code": "@Service\nclass UserService {}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"component scan\");\n    }\n}",
+    "expectedOutput": "component scan\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "19_dto_mapping",
+    "bin": "19_dto_mapping",
+    "topic": "web",
+    "code": "record UserResponse(Long id, String name) {}\n\npublic class Main {\n    public static void main(String[] args) {\n        UserResponse dto = new UserResponse(1L, \"Alice\");\n        System.out.println(dto.name());\n    }\n}",
+    "expectedOutput": "Alice\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 1
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "20_proxy_self_invocation",
+    "bin": "20_proxy_self_invocation",
+    "topic": "spring",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"proxy intercepts external call\");\n        System.out.println(\"self call can skip proxy\");\n    }\n}",
+    "expectedOutput": "proxy intercepts external call\nself call can skip proxy\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 1
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "21_fetch_join_tradeoff",
+    "bin": "21_fetch_join_tradeoff",
+    "topic": "jpa",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"fewer queries\");\n        System.out.println(\"bigger result shape\");\n    }\n}",
+    "expectedOutput": "fewer queries\nbigger result shape\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "22_domain_events",
+    "bin": "22_domain_events",
+    "topic": "messaging",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"order placed\");\n        System.out.println(\"send follow-up asynchronously\");\n    }\n}",
+    "expectedOutput": "order placed\nsend follow-up asynchronously\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "23_saga_compensation",
+    "bin": "23_saga_compensation",
+    "topic": "tx",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"step 1 success\");\n        System.out.println(\"compensate later step\");\n    }\n}",
+    "expectedOutput": "step 1 success\ncompensate later step\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "24_connection_pool_pressure",
+    "bin": "24_connection_pool_pressure",
+    "topic": "data",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"threads waiting\");\n        System.out.println(\"db bottleneck\");\n    }\n}",
+    "expectedOutput": "threads waiting\ndb bottleneck\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 1
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
+  },
+  {
+    "id": "25_modular_monolith",
+    "bin": "25_modular_monolith",
+    "topic": "spring",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"single deployable\");\n        System.out.println(\"clear module boundaries\");\n    }\n}",
+    "expectedOutput": "single deployable\nclear module boundaries\n",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
   }
 ]

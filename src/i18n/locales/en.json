@@ -197,7 +197,7 @@
             "Correct. The object starts life fully wired.",
             "Beans are still registered normally."
           ],
-          "answerReason": "You declare the object’s contract up front instead of hoping fields are injected later."
+          "answerReason": "You declare the object\u2019s contract up front instead of hoping fields are injected later."
         }
       }
     },
@@ -209,7 +209,7 @@
           "question": "What is printed?"
         },
         "q2": {
-          "question": "What does it mean for Spring to “manage” a bean?",
+          "question": "What does it mean for Spring to \u201cmanage\u201d a bean?",
           "options": [
             "It compiles the class into the JVM.",
             "It removes the need for constructors.",
@@ -709,6 +709,302 @@
             "Correct. Decoupling and complexity often come together."
           ],
           "answerReason": "Asynchronous architecture shifts when and how consistency is achieved."
+        }
+      }
+    },
+    "18_component_scan": {
+      "title": "Component Scan and Stereotypes",
+      "description": "Spring can discover `@Service` or `@Repository` classes automatically.\n\n```java\n@Service\nclass UserService {}\n```\n\nThe container registers the component and wires it into the object graph.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why use Spring stereotypes?",
+          "options": [
+            "To let the container discover and register components.",
+            "To make the class final.",
+            "To remove constructors."
+          ],
+          "explanations": [
+            "Correct. Stereotypes mark application components.",
+            "Finality is unrelated.",
+            "Constructors still exist."
+          ],
+          "answerReason": "Stereotypes are mainly about registration and intent."
+        },
+        "q3": {
+          "question": "What does component scanning save you from?",
+          "options": [
+            "Writing all business logic twice.",
+            "Manual bean registration for every application class.",
+            "Using Java packages."
+          ],
+          "explanations": [
+            "It does not duplicate logic.",
+            "Correct. Scanning automates registration.",
+            "Packages still exist normally."
+          ],
+          "answerReason": "Scanning reduces hand-wired registration work."
+        }
+      }
+    },
+    "19_dto_mapping": {
+      "title": "DTO Mapping at the Boundary",
+      "description": "Controllers often return DTOs instead of exposing entities directly.\n\n```java\nrecord UserResponse(Long id, String name) {}\n```\n\nThe API contract should stay separate from persistence details.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why return DTOs from controllers?",
+          "options": [
+            "Because entities cannot contain fields.",
+            "Because API shape and persistence shape should not be tightly coupled.",
+            "Because Spring MVC forbids returning entities."
+          ],
+          "explanations": [
+            "Entities can contain fields.",
+            "Correct. DTOs protect the API boundary.",
+            "Spring can return entities, but it is often weak design."
+          ],
+          "answerReason": "DTOs keep transport shape independent from persistence shape."
+        },
+        "q3": {
+          "question": "What does DTO mapping control?",
+          "options": [
+            "What data the API exposes and how it evolves.",
+            "How the JVM schedules threads.",
+            "Whether SQL can run."
+          ],
+          "explanations": [
+            "Correct. DTOs define the external contract.",
+            "Thread scheduling is unrelated.",
+            "SQL still runs either way."
+          ],
+          "answerReason": "DTOs are about boundary design and contract control."
+        }
+      }
+    },
+    "20_proxy_self_invocation": {
+      "title": "Proxy Self-Invocation",
+      "description": "Features such as `@Transactional` are often applied through proxies.\n\n```java\nservice.outer();\nthis.inner();\n```\n\nA plain self-call can bypass proxy interception.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why can a self-call skip `@Transactional` behavior?",
+          "options": [
+            "Because transactions only work in Kotlin.",
+            "Because proxy interception happens at the bean boundary, not on plain `this` calls.",
+            "Because annotations are removed at runtime."
+          ],
+          "explanations": [
+            "Kotlin is unrelated.",
+            "Correct. The proxy sees external calls.",
+            "That is not the reason here."
+          ],
+          "answerReason": "Proxy-based features depend on where interception happens."
+        },
+        "q3": {
+          "question": "What is the design lesson?",
+          "options": [
+            "Framework magic has boundaries you need to understand.",
+            "Internal method calls are illegal.",
+            "Annotations always rewrite bytecode."
+          ],
+          "explanations": [
+            "Correct. You need to know where framework behavior begins and ends.",
+            "Internal calls are legal.",
+            "That is not the default Spring model."
+          ],
+          "answerReason": "AOP-style features are boundary-based, not magic everywhere."
+        }
+      }
+    },
+    "21_fetch_join_tradeoff": {
+      "title": "Fetch Join Tradeoffs",
+      "description": "Fetch joins can reduce N+1 queries, but they are not a universal fix.\n\n```jpql\nselect o from Order o join fetch o.lines\n```\n\nThey trade query count against row duplication and pagination behavior.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why is \u201cadd more fetch joins\u201d a weak blanket rule?",
+          "options": [
+            "Because JPQL does not support joins.",
+            "Because fetch joins always disable caching.",
+            "Because fewer queries can still mean larger result sets or pagination problems."
+          ],
+          "explanations": [
+            "JPQL does support joins.",
+            "That is not the main issue.",
+            "Correct. Query shape still matters."
+          ],
+          "answerReason": "Loading strategy is always a tradeoff, not one universal rule."
+        },
+        "q3": {
+          "question": "What should drive the loading strategy?",
+          "options": [
+            "Only fewer lines of code.",
+            "The real access pattern and query behavior.",
+            "Only the number of repository methods."
+          ],
+          "explanations": [
+            "Line count is not the goal.",
+            "Correct. Optimize for actual access and query shape.",
+            "Method count is not the target."
+          ],
+          "answerReason": "Measure the real access pattern, not one metric in isolation."
+        }
+      }
+    },
+    "22_domain_events": {
+      "title": "Domain Events and Decoupling",
+      "description": "A domain event lets one part of the system publish that something important happened.\n\n```java\npublish(new OrderPlaced(orderId));\n```\n\nOther flows can react without being hard-wired into the same call chain.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why use domain events?",
+          "options": [
+            "To decouple follow-up actions from the direct request path.",
+            "To make transactions unnecessary.",
+            "To prevent business logic from existing."
+          ],
+          "explanations": [
+            "Correct. Events reduce direct coupling.",
+            "Transactions still matter.",
+            "Business logic still exists."
+          ],
+          "answerReason": "Events separate the fact that something happened from all immediate reactions."
+        },
+        "q3": {
+          "question": "What new cost comes with events?",
+          "options": [
+            "Java stops supporting classes.",
+            "Ordering, retries, observability, and consistency get harder.",
+            "Entities cannot be saved anymore."
+          ],
+          "explanations": [
+            "Classes still work normally.",
+            "Correct. Decoupling adds operational tradeoffs.",
+            "Persistence still exists."
+          ],
+          "answerReason": "Events shift complexity instead of removing it."
+        }
+      }
+    },
+    "23_saga_compensation": {
+      "title": "Saga and Compensation",
+      "description": "Across services, one giant local transaction usually does not exist.\n\n```text\nstep 1 -> step 2 -> compensate if later work fails\n```\n\nA saga models workflow recovery rather than pretending everything rolls back together.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why is a saga different from one local DB transaction?",
+          "options": [
+            "Because sagas run only in tests.",
+            "Because sagas disable failure handling.",
+            "Because distributed workflows need explicit recovery and compensation."
+          ],
+          "explanations": [
+            "Sagas are a production pattern.",
+            "Failure handling is the point.",
+            "Correct. Cross-service consistency needs workflow reasoning."
+          ],
+          "answerReason": "Distributed work requires step-by-step recovery logic."
+        },
+        "q3": {
+          "question": "What should a strong saga design include?",
+          "options": [
+            "Clear compensation rules for partial success.",
+            "Only larger controller methods.",
+            "No monitoring because the flow is async."
+          ],
+          "explanations": [
+            "Correct. Partial completion must be planned.",
+            "Controller size is irrelevant.",
+            "Async systems need more observability, not less."
+          ],
+          "answerReason": "A saga without recovery rules is incomplete."
+        }
+      }
+    },
+    "24_connection_pool_pressure": {
+      "title": "Connection Pool Pressure",
+      "description": "Low CPU does not always mean the service has spare capacity.\n\n```text\nrequest threads -> wait for DB connection\n```\n\nIf the pool is saturated, throughput is bounded by the downstream resource.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "What does connection-pool exhaustion usually signal?",
+          "options": [
+            "The JVM forgot how to schedule.",
+            "A downstream capacity bottleneck is limiting throughput.",
+            "The controller is missing annotations."
+          ],
+          "explanations": [
+            "That is not the first reading.",
+            "Correct. A shared dependency is saturated.",
+            "Annotations are unrelated."
+          ],
+          "answerReason": "The pool is a hard capacity boundary for DB-bound work."
+        },
+        "q3": {
+          "question": "Why can CPU still look low?",
+          "options": [
+            "Because SQL uses no resources.",
+            "Because low CPU always means the app is healthy.",
+            "Because threads are blocked on an external resource rather than burning compute."
+          ],
+          "explanations": [
+            "SQL still uses resources.",
+            "That inference is unsafe.",
+            "Correct. Waiting and useful compute are different states."
+          ],
+          "answerReason": "A blocked system can be unhealthy without being CPU-bound."
+        }
+      }
+    },
+    "25_modular_monolith": {
+      "title": "Modular Monolith Architecture",
+      "description": "A modular monolith keeps one deployable unit while enforcing strong internal boundaries.\n\n```text\norders | billing | users\n```\n\nThat often gives most of the separation value without immediate distributed-system cost.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why can a modular monolith be a strong early architecture choice?",
+          "options": [
+            "It gives internal separation without paying distributed-system complexity too early.",
+            "It is always more scalable than every microservice design.",
+            "Spring Boot cannot support multiple modules."
+          ],
+          "explanations": [
+            "Correct. It matches complexity to current needs.",
+            "That is too absolute.",
+            "Spring Boot can support modular organization."
+          ],
+          "answerReason": "Distribution should solve a real problem, not be premature structure."
+        },
+        "q3": {
+          "question": "What still matters inside a modular monolith?",
+          "options": [
+            "Only one package name.",
+            "Clear module APIs and boundaries in the codebase.",
+            "Disabling tests because everything is local."
+          ],
+          "explanations": [
+            "Package naming alone is not enough.",
+            "Correct. Internal architecture still matters.",
+            "Local deployment does not remove the need for tests."
+          ],
+          "answerReason": "A monolith can still be well-architected or badly coupled."
         }
       }
     }
