@@ -6,7 +6,7 @@
     "search": "Search lessons, topics, or ids",
     "keyboardHint": "Finish each lesson quiz set to unlock the next lesson.",
     "heroTitle": "Learn Java, Kotlin, the JVM, JPA, and Spring by reading real code paths.",
-    "heroBody": "This track starts with language syntax and moves into runtime structure, dependency injection, persistence, transactions, and testing. Each lesson keeps the code small and focuses on why the framework behaves that way.",
+    "heroBody": "This track now covers more than syntax and DI. It moves through the JVM, bean creation, request flow, JPA identity, lazy loading, transaction boundaries, and testing patterns so the Spring stack feels like a system rather than a list of annotations.",
     "startLearning": "Start learning",
     "lessonNotFound": "Lesson not found.",
     "courseComplete": "Every lesson is complete.",
@@ -29,7 +29,7 @@
     "howItWorks2": "Use the embedded editor to annotate or tweak the snippet while keeping the lesson context nearby.",
     "howItWorks3": "Finish the quiz set, then continue in the external workspace when you want a larger sandbox.",
     "previewLabel": "preview",
-    "previewStatus": "Trace the request path from entry point to bean wiring to persistence.",
+    "previewStatus": "Follow the path from language basics through container wiring, persistence behavior, and transaction boundaries.",
     "homeTip": "Use the embedded editor as a scratchpad, then continue in Kotlin Playground or your IDE for a full Spring project.",
     "howItWorks": "How it works",
     "lessonList": "Lesson list",
@@ -41,89 +41,91 @@
     "kotlin": "kotlin",
     "jvm": "jvm",
     "spring": "spring",
-    "jpa": "jpa",
+    "beans": "beans",
     "web": "web",
+    "jpa": "jpa",
     "tx": "transactions",
+    "data": "data access",
     "test": "testing"
   },
   "lessons": {
     "01_java_main": {
       "title": "Java Main and Static Entry",
-      "description": "A Java program starts from a `public static void main(String[] args)` method.\n\n```java\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"boot\");\n    }\n}\n```\n\n`public` makes the method accessible, `static` means the JVM can call it without an instance, and `String[] args` receives command-line arguments.",
+      "description": "A Java program starts from `public static void main(String[] args)`.\n\n```java\npublic static void main(String[] args)\n```\n\nThe JVM needs an entry point it can call before any object exists.",
       "quizzes": {
         "q1": {
-          "question": "What is printed by this snippet?"
+          "question": "What is printed?"
         },
         "q2": {
-          "question": "Why is `main` declared `static` here?",
+          "question": "Why is `main` declared `static`?",
           "options": [
-            "The JVM needs to call it before any `Main` object exists.",
-            "Static methods are always faster than instance methods.",
-            "Without `static`, Java cannot print to stdout."
+            "The JVM must call it before any `Main` instance exists.",
+            "Static methods are always faster.",
+            "Without `static`, Java cannot print."
           ],
           "explanations": [
-            "Correct direction: the entry point must be callable without constructing the class first.",
-            "Performance is not the reason the entry point is static.",
-            "Printing is unrelated to whether the method is static."
+            "Correct. The entry point must be callable without constructing the class first.",
+            "Performance is not the reason.",
+            "Printing is unrelated to `static`."
           ],
-          "answerReason": "The entry point is discovered by the JVM before your program creates application objects."
+          "answerReason": "The JVM discovers and invokes `main` before your application has created objects."
         },
         "q3": {
-          "question": "What does `String[] args` represent in `main`?",
+          "question": "What does `String[] args` represent?",
           "options": [
-            "A list of every class loaded by the JVM.",
+            "A list of loaded classes.",
             "The command-line arguments passed to the program.",
-            "The fields declared on the `Main` class."
+            "The fields declared on the class."
           ],
           "explanations": [
-            "Class loading metadata is not passed through `args`.",
-            "Yes. `args` is the argument array supplied when the process starts.",
-            "Class fields are unrelated to the `main` parameter list."
+            "Loaded classes are unrelated.",
+            "Correct. `args` carries process input from the command line.",
+            "Fields are unrelated to the method parameter."
           ],
-          "answerReason": "The JVM calls `main` with whatever strings were passed on the command line."
+          "answerReason": "`args` is just the process argument array provided at startup."
         }
       }
     },
     "02_kotlin_data_class": {
       "title": "Kotlin Data Classes",
-      "description": "Kotlin `data class` generates useful methods for state holders.\n\n```kotlin\ndata class User(val name: String, val age: Int)\n```\n\nThe compiler creates `toString()`, `equals()`, `hashCode()`, and `copy()` from the primary constructor properties.",
+      "description": "Kotlin `data class` generates value-oriented methods from constructor properties.\n\n```kotlin\ndata class User(val name: String, val age: Int)\n```",
       "quizzes": {
         "q1": {
           "question": "What is the output?"
         },
         "q2": {
-          "question": "What is the main reason to use `data class` here?",
+          "question": "Why use `data class` here?",
           "options": [
-            "It generates value-oriented methods from constructor properties.",
-            "It makes the object mutable by default.",
-            "It automatically registers the class as a Spring bean."
+            "It generates useful value-style methods such as `copy`, `equals`, and `toString`.",
+            "It automatically registers a Spring bean.",
+            "It makes the object mutable by default."
           ],
           "explanations": [
-            "Yes. `data class` is about value semantics and compiler-generated helpers.",
-            "Mutability comes from `var` versus `val`, not from `data class` itself.",
-            "Spring bean registration is separate from Kotlin language features."
+            "Correct. `data class` is a language feature for value-centric types.",
+            "Bean registration is separate.",
+            "Mutability depends on `val` vs `var`."
           ],
-          "answerReason": "Use `data class` when the type mainly represents data and equality should depend on its fields."
+          "answerReason": "Data classes are for state-holder types where field-based equality and copying are useful."
         },
         "q3": {
-          "question": "Which generated feature is most useful when you want a modified copy of an immutable object?",
+          "question": "Which generated feature is especially useful for immutable updates?",
           "options": [
             "`hashCode()`",
             "`componentN()`",
             "`copy()`"
           ],
           "explanations": [
-            "`hashCode()` supports hashing and equality-related collections, not cloning with changes.",
-            "`componentN()` supports destructuring, not constructing a changed instance.",
-            "Correct. `copy()` creates a new instance while letting you override selected properties."
+            "`hashCode()` is for hashing, not structural updates.",
+            "`componentN()` is for destructuring.",
+            "Correct. `copy()` makes small immutable updates ergonomic."
           ],
-          "answerReason": "`copy()` is what makes small immutable updates ergonomic in Kotlin data models."
+          "answerReason": "`copy()` is one reason Kotlin immutable data modeling feels concise."
         }
       }
     },
     "03_jvm_memory": {
-      "title": "Stack Frames and Heap Objects",
-      "description": "A local reference lives in a stack frame, while the object it points to is typically on the heap.\n\n```java\nString name = new String(\"bean\");\n```\n\nThe reference variable and the object are not the same thing. That distinction matters for GC, aliasing, and mutation through shared references.",
+      "title": "Stack Frames, References, and Heap Objects",
+      "description": "A local reference is not the same thing as the object it points to.\n\n```java\nBox b = a;\n```\n\nThat assignment copies a reference, not the heap object itself.",
       "quizzes": {
         "q1": {
           "question": "What is printed?"
@@ -132,72 +134,109 @@
           "question": "Why does changing `b.value` affect `a.value`?",
           "options": [
             "Both variables refer to the same object instance.",
-            "Java silently copies all object fields between variables.",
-            "The JVM rewrites both names into one variable during compilation."
+            "Java deep-copies object fields on assignment.",
+            "The JVM merges the variable names."
           ],
           "explanations": [
-            "Yes. `a` and `b` are two references to one heap object.",
+            "Correct. Two references point to one object.",
             "Java does not deep-copy objects on assignment.",
-            "Compilation does not merge variable names like that."
+            "Compilation does not merge names like that."
           ],
-          "answerReason": "Assignment of object references copies the reference, not the object itself."
+          "answerReason": "Assignment of object references copies the reference, not the object."
         },
         "q3": {
-          "question": "What is actually copied by `Box b = a;` in this example?",
+          "question": "What is actually copied by `Box b = a;`?",
           "options": [
-            "The reference value, not the heap object itself.",
-            "A brand-new heap object with all fields duplicated.",
-            "Only the `value` field, but not the rest of the object."
+            "A new heap object with duplicated fields.",
+            "The reference value pointing to the object.",
+            "Only the `value` field."
           ],
           "explanations": [
-            "Correct. Both variables end up pointing at the same object instance.",
-            "Assignment of object references does not clone the object automatically.",
-            "Java does not do partial object copying on simple assignment."
+            "Simple assignment does not clone the object.",
+            "Correct. The object stays one object; the reference is copied.",
+            "Java does not copy only one field here."
           ],
-          "answerReason": "Reference assignment aliases one object; it does not construct another object for you."
+          "answerReason": "This is why aliasing and mutation through shared references matter on the JVM."
         }
       }
     },
     "04_spring_di": {
       "title": "Constructor Injection",
-      "description": "Spring prefers constructor injection because dependencies become explicit and the object can start fully initialized.\n\n```java\n@Service\nclass OrderService {\n    private final PaymentClient paymentClient;\n\n    OrderService(PaymentClient paymentClient) {\n        this.paymentClient = paymentClient;\n    }\n}\n```",
+      "description": "Spring prefers constructor injection because dependencies become explicit and the object can be fully initialized at creation.\n\n```java\n@Service\nclass OrderService {\n    OrderService(PaymentClient client) { ... }\n}\n```",
       "quizzes": {
         "q1": {
           "question": "What is the output?"
         },
         "q2": {
-          "question": "Why is constructor injection usually preferred over field injection?",
+          "question": "Why is constructor injection usually preferred?",
           "options": [
             "It makes required dependencies explicit and easier to test.",
-            "It lets Spring skip bean creation until the method is called.",
-            "It removes the need for interfaces in Java."
+            "It lets Spring ignore missing dependencies.",
+            "It removes the need for interfaces."
           ],
           "explanations": [
-            "Correct. Constructor injection is explicit and works well with immutability and tests.",
-            "Lazy creation is a different mechanism.",
-            "Interfaces are unrelated to field versus constructor injection."
+            "Correct. Constructor injection works well with explicit object design.",
+            "Missing required dependencies are still errors.",
+            "Interfaces are unrelated."
           ],
-          "answerReason": "If an object cannot work without a dependency, the constructor is the clearest place to require it."
+          "answerReason": "If a class cannot work without a dependency, the constructor is the clearest place to require it."
         },
         "q3": {
           "question": "Why does constructor injection fit immutable service design well?",
           "options": [
-            "Dependencies can be required once at construction and stored in final fields.",
-            "It allows Spring to ignore missing dependencies safely.",
-            "It makes beans run without being registered in the container."
+            "It makes fields mutable later.",
+            "Dependencies can be required once and stored in fixed fields.",
+            "It prevents bean registration."
           ],
           "explanations": [
-            "Yes. Constructor injection pairs naturally with explicit, non-null, fixed dependencies.",
-            "Missing required dependencies are still configuration errors.",
-            "Spring still needs to create and manage the bean normally."
+            "Constructor injection usually works with final/immutable dependencies.",
+            "Correct. The object starts life fully wired.",
+            "Beans are still registered normally."
           ],
-          "answerReason": "If a service cannot work without a collaborator, the constructor is the cleanest place to enforce that contract."
+          "answerReason": "You declare the object’s contract up front instead of hoping fields are injected later."
         }
       }
     },
-    "05_web_controller": {
+    "05_bean_lifecycle": {
+      "title": "Bean Creation and Container Ownership",
+      "description": "A Spring bean is an object created and managed by the container rather than by arbitrary `new` calls throughout the codebase.\n\n```java\n@Component\nclass Clock { }\n```\n\nContainer ownership is what makes injection possible.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "What does it mean for Spring to “manage” a bean?",
+          "options": [
+            "It compiles the class into the JVM.",
+            "It removes the need for constructors.",
+            "The container controls creation, wiring, and lifecycle of that object."
+          ],
+          "explanations": [
+            "Compilation is separate from the container.",
+            "Constructors still matter.",
+            "Correct. Bean management is about object lifecycle and dependency graph control."
+          ],
+          "answerReason": "Dependency injection works because the container, not arbitrary calling code, controls object construction."
+        },
+        "q3": {
+          "question": "Why does container-managed creation matter architecturally?",
+          "options": [
+            "Because wiring can be centralized and cross-cutting lifecycle behavior can be applied consistently.",
+            "Because beans no longer need types.",
+            "Because it makes persistence automatic for every class."
+          ],
+          "explanations": [
+            "Correct. Centralized construction enables consistent configuration and lifecycle control.",
+            "Type information still matters.",
+            "Persistence is a separate concern."
+          ],
+          "answerReason": "A container becomes useful when object graphs and cross-cutting setup stop being trivial."
+        }
+      }
+    },
+    "06_web_controller": {
       "title": "Controller to Service Flow",
-      "description": "A controller should stay thin. It receives the HTTP request, delegates business logic to a service, and returns a response.\n\n```java\n@GetMapping(\"/users/{id}\")\nUserResponse get(@PathVariable Long id) {\n    return service.find(id);\n}\n```",
+      "description": "A controller should stay thin: receive the HTTP request, delegate business logic, and shape the response.\n\n```java\n@GetMapping(\"/users/{id}\")\nUserResponse get(...)\n```",
       "quizzes": {
         "q1": {
           "question": "What is printed?"
@@ -206,109 +245,183 @@
           "question": "What is the better responsibility split?",
           "options": [
             "Controller handles transport details; service owns business logic.",
-            "Controller should contain all SQL because it sees request parameters first.",
+            "Controller should contain all SQL.",
             "Service should parse HTTP annotations directly."
           ],
           "explanations": [
-            "Yes. Keep transport and domain logic separated.",
-            "Putting SQL in controllers creates coupling and poor test boundaries.",
-            "HTTP annotation parsing belongs to the web layer, not the service layer."
+            "Correct. Keep transport and domain concerns separated.",
+            "Putting SQL in controllers creates tight coupling.",
+            "HTTP parsing belongs to the web boundary."
           ],
-          "answerReason": "Thin controllers scale better because business rules remain reusable outside one endpoint."
+          "answerReason": "Thin controllers scale better because business rules remain reusable and testable."
         },
         "q3": {
           "question": "What usually belongs in the controller rather than the service?",
           "options": [
-            "The core business rule for calculating totals.",
-            "The persistence mapping for a JPA entity.",
+            "The core pricing algorithm.",
+            "Entity lifecycle mapping.",
             "HTTP-specific concerns like path variables and response status."
           ],
           "explanations": [
-            "Business rules are usually more reusable when they live in a service layer.",
-            "Entity mapping belongs to the persistence model, not the controller.",
-            "Correct. Controllers are the transport boundary where HTTP details are handled."
+            "Business rules are usually more reusable in services.",
+            "Entity mapping belongs to persistence/domain concerns.",
+            "Correct. Controllers are the transport boundary."
           ],
-          "answerReason": "Controllers should translate web requests into service calls and translate service results back into HTTP responses."
+          "answerReason": "The controller is where HTTP concepts enter and leave the system."
         }
       }
     },
-    "06_jpa_entity": {
-      "title": "JPA Entity Identity",
-      "description": "A JPA entity represents a row identity over time. Its lifecycle matters more than just its current field values.\n\n```java\n@Entity\nclass Member {\n    @Id @GeneratedValue\n    Long id;\n}\n```\n\nAn entity changes state from transient to managed to detached depending on the persistence context.",
+    "07_jpa_entity": {
+      "title": "Entity Identity and Persistence Context",
+      "description": "A JPA entity represents row identity over time. Its lifecycle matters, not only its field values.\n\n```java\n@Entity\nclass Member { @Id Long id; }\n```",
       "quizzes": {
         "q1": {
           "question": "What is printed before persistence assigns an id?"
         },
         "q2": {
-          "question": "Why is entity identity important in JPA?",
+          "question": "Why is entity identity important?",
           "options": [
             "The persistence context tracks one managed instance per database identity.",
-            "Entities are just DTOs with extra annotations, so identity does not matter.",
-            "Identity only matters for native SQL, not ORM."
+            "Entities are just DTOs with annotations.",
+            "Identity matters only for native SQL."
           ],
           "explanations": [
-            "Correct. JPA uses identity to manage change tracking and caching.",
-            "Entities have lifecycle and identity semantics beyond DTOs.",
+            "Correct. JPA change tracking and caching depend on identity.",
+            "Entities have lifecycle semantics beyond DTOs.",
             "Identity is core to ORM behavior too."
           ],
-          "answerReason": "If two objects claim the same row identity, the persistence context needs a consistent managed instance."
+          "answerReason": "If two objects claim one row identity, the persistence context must reason about one managed instance."
         },
         "q3": {
-          "question": "What changes when an entity becomes managed by the persistence context?",
+          "question": "What changes when an entity becomes managed?",
           "options": [
-            "It stops having an identifier.",
-            "JPA begins tracking changes on that instance for flush/commit.",
+            "It loses its identity field.",
+            "JPA begins tracking changes on that instance for flush or commit.",
             "It can no longer be compared by identity."
           ],
           "explanations": [
-            "Managed entities still keep their identity; that is central to tracking them.",
-            "Correct. A managed entity is associated with a persistence context that observes updates.",
-            "Identity remains important; it does not disappear after persistence begins managing the object."
+            "Managed entities still have identity.",
+            "Correct. Managed means the persistence context observes that object as part of the unit of work.",
+            "Identity remains important."
           ],
-          "answerReason": "Managed means the ORM is now watching that entity instance as part of the unit of work."
+          "answerReason": "Managed entities participate in change tracking because the persistence context now owns that live instance relationship."
         }
       }
     },
-    "07_transaction_boundary": {
-      "title": "Transaction Boundaries",
-      "description": "A transaction should wrap a unit of work that must succeed or fail together.\n\n```java\n@Transactional\npublic void transfer(...) {\n    withdraw();\n    deposit();\n}\n```\n\nWithout one boundary, partial writes can escape when an error happens in the middle.",
+    "08_lazy_loading": {
+      "title": "Lazy Loading and Object Graph Boundaries",
+      "description": "ORM relationships are often loaded lazily so the whole graph is not fetched immediately.\n\n```java\nmember.getOrders()\n```\n\nThat convenience can hide extra queries if the access pattern is not designed carefully.",
       "quizzes": {
         "q1": {
           "question": "What is printed?"
         },
         "q2": {
-          "question": "Why is `@Transactional` used around related writes?",
+          "question": "Why is lazy loading attractive?",
           "options": [
-            "To keep the unit of work atomic if one step fails.",
-            "To make methods public automatically.",
-            "To avoid creating any JDBC connections."
+            "It eliminates all database queries.",
+            "It forces everything into one giant join.",
+            "It delays fetching related data until code actually touches it."
           ],
           "explanations": [
-            "Yes. The goal is atomicity and consistent state.",
-            "Visibility is unrelated to transactions.",
-            "Transactions do not remove the need for database connections."
+            "Queries still happen; they are just delayed.",
+            "Lazy loading is often used specifically to avoid eager loading everything.",
+            "Correct. The idea is to fetch related data on demand."
           ],
-          "answerReason": "Atomicity matters when multiple updates must either all commit or all roll back."
+          "answerReason": "Lazy loading is about delaying work, not eliminating it."
         },
         "q3": {
-          "question": "What failure does a transaction primarily protect against in multi-step writes?",
+          "question": "Why can lazy loading become a performance problem?",
           "options": [
-            "Typos in Java variable names.",
-            "The JVM loading classes in the wrong order.",
-            "A partial commit where early writes escape before a later step fails."
+            "Touching related objects in loops can trigger many extra queries unexpectedly.",
+            "It prevents entities from having fields.",
+            "It disables transactions automatically."
           ],
           "explanations": [
-            "Transactions do not address source-level typing mistakes.",
-            "Class loading is unrelated to transactional integrity.",
-            "Correct. The boundary is there so related changes succeed or fail together."
+            "Correct. The classic risk is hidden N+1 query behavior.",
+            "Fields are unaffected.",
+            "Transactions are separate."
           ],
-          "answerReason": "Without a transaction, one update may persist even though the whole business action should have failed."
+          "answerReason": "What looks like object navigation in application code may actually be repeated database traffic."
         }
       }
     },
-    "08_spring_test": {
+    "09_transaction_boundary": {
+      "title": "Transaction Boundaries",
+      "description": "A transaction should wrap a unit of work that must succeed or fail together.\n\n```java\n@Transactional\npublic void transfer(...)\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why use `@Transactional` around related writes?",
+          "options": [
+            "To keep the unit of work atomic if one step fails.",
+            "To make methods public automatically.",
+            "To avoid JDBC connections."
+          ],
+          "explanations": [
+            "Correct. The goal is all-or-nothing state change.",
+            "Visibility is unrelated.",
+            "Transactions do not remove the need for a database connection."
+          ],
+          "answerReason": "Atomicity matters when several writes should commit or roll back together."
+        },
+        "q3": {
+          "question": "What failure does a transaction primarily protect against?",
+          "options": [
+            "Typos in variable names.",
+            "The JVM loading classes in the wrong order.",
+            "A partial commit where some writes escape before a later step fails."
+          ],
+          "explanations": [
+            "Transactions do not solve source-level typing mistakes.",
+            "Class loading order is unrelated here.",
+            "Correct. Partial persistence is the real business risk."
+          ],
+          "answerReason": "Without a transaction, the system may persist an inconsistent half-completed business action."
+        }
+      }
+    },
+    "10_repository_queries": {
+      "title": "Repository Abstractions and Query Boundaries",
+      "description": "A repository hides data access details behind a domain-oriented interface.\n\n```java\ninterface UserRepository {\n    User findById(Long id);\n}\n```\n\nThis gives services a cleaner contract than embedding SQL everywhere.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why is a repository abstraction useful?",
+          "options": [
+            "It removes the need for a database.",
+            "It separates domain-oriented access operations from higher-level business logic.",
+            "It turns every query into a transaction automatically."
+          ],
+          "explanations": [
+            "A repository still talks to a data source somehow.",
+            "Correct. Services can ask for domain data without owning low-level query details.",
+            "Transactions are separate."
+          ],
+          "answerReason": "Repositories can keep persistence concerns from leaking through every service method."
+        },
+        "q3": {
+          "question": "What is the risk when services build ad hoc queries everywhere?",
+          "options": [
+            "Persistence logic becomes scattered and harder to evolve consistently.",
+            "The JVM stops supporting collections.",
+            "Controllers no longer compile."
+          ],
+          "explanations": [
+            "Correct. Scattered data access creates coupling and inconsistency.",
+            "Collections are unaffected.",
+            "Compilation is not the main issue."
+          ],
+          "answerReason": "A dedicated data-access boundary helps contain change in how data is fetched and persisted."
+        }
+      }
+    },
+    "11_spring_test": {
       "title": "Slice Tests and Fast Feedback",
-      "description": "Not every test needs the full application context. Slice tests load only the layer you care about and keep feedback fast.\n\n```java\n@WebMvcTest(UserController.class)\nclass UserControllerTest { }\n```",
+      "description": "Not every test needs the full application context. Slice tests load only the layer you care about.\n\n```java\n@WebMvcTest(UserController.class)\n```",
       "quizzes": {
         "q1": {
           "question": "What is printed?"
@@ -317,29 +430,66 @@
           "question": "Why use a slice test such as `@WebMvcTest`?",
           "options": [
             "It narrows the loaded context to the web layer for faster, focused tests.",
-            "It automatically tests the real database transaction log.",
+            "It automatically tests the real transaction log.",
             "It replaces assertions with Spring-generated checks."
           ],
           "explanations": [
-            "Correct. Slice tests reduce scope and speed up feedback.",
-            "A web slice test does not load the full database stack by default.",
+            "Correct. Focused scope speeds feedback and isolates failures.",
+            "A web slice test does not load the whole database stack by default.",
             "You still write assertions yourself."
           ],
-          "answerReason": "Focused tests fail for one reason and run quickly enough to stay in the normal workflow."
+          "answerReason": "Good test pyramids rely on many fast, narrow tests before full integration checks."
         },
         "q3": {
-          "question": "Why are focused tests valuable even when you also have full integration tests?",
+          "question": "Why are focused tests valuable even when you also have integration tests?",
           "options": [
-            "They replace the need for integration tests completely.",
+            "They replace all need for integration tests.",
             "They isolate one layer and fail faster with a narrower cause.",
-            "They guarantee every Spring bean is loaded."
+            "They guarantee every bean is loaded."
           ],
           "explanations": [
-            "Focused tests help, but they do not eliminate the need for broader coverage.",
-            "Correct. Narrow scope keeps feedback quick and the reason for failure easier to see.",
-            "A slice test intentionally does not load every bean."
+            "Broader tests still matter.",
+            "Correct. Narrow tests keep failure reasons clearer and feedback faster.",
+            "Slice tests intentionally do not load every bean."
           ],
-          "answerReason": "Good test pyramids use faster, narrower tests to catch many issues before the full application needs to start."
+          "answerReason": "Fast focused tests catch many issues before you pay the cost of starting the whole application."
+        }
+      }
+    },
+    "12_testcontainers_boundary": {
+      "title": "Integration Tests and Real Infrastructure",
+      "description": "Some tests should cross the abstraction boundary and exercise real infrastructure.\n\n```text\ncontroller -> service -> repository -> real database\n```\n\nThe point is not to replace narrow tests, but to verify behavior at the seams where mocks can lie.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why keep some real integration tests even if slice tests are strong?",
+          "options": [
+            "Because integration tests make unit tests unnecessary.",
+            "Because mocks are always wrong.",
+            "Because some failures appear only when the real framework, configuration, and infrastructure interact together."
+          ],
+          "explanations": [
+            "Integration tests complement rather than eliminate narrow tests.",
+            "Mocks are useful, just not sufficient for every risk.",
+            "Correct. Real seams can fail in ways isolated tests do not expose."
+          ],
+          "answerReason": "Abstraction is good, but some risks live exactly at the integration boundary."
+        },
+        "q3": {
+          "question": "What is the main tradeoff of deeper integration tests?",
+          "options": [
+            "They give broader confidence but are slower and usually less specific when they fail.",
+            "They always run faster than pure unit tests.",
+            "They remove the need to understand framework configuration."
+          ],
+          "explanations": [
+            "Correct. Broader scope means broader signals and higher cost.",
+            "Integration tests are usually slower.",
+            "They often require even more configuration awareness."
+          ],
+          "answerReason": "Use integration tests deliberately for seam validation, not as the only testing strategy."
         }
       }
     }

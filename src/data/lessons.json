@@ -49,7 +49,7 @@
     "id": "03_jvm_memory",
     "bin": "03_jvm_memory",
     "topic": "jvm",
-    "code": "public class Main {\n    static class Box {\n        String value;\n        Box(String value) {\n            this.value = value;\n        }\n    }\n\n    public static void main(String[] args) {\n        Box a = new Box(\"left\");\n        Box b = a;\n        b.value = \"right\";\n        System.out.println(a.value);\n    }\n}",
+    "code": "public class Main {\n    static class Box {\n        String value;\n        Box(String value) { this.value = value; }\n    }\n\n    public static void main(String[] args) {\n        Box a = new Box(\"left\");\n        Box b = a;\n        b.value = \"right\";\n        System.out.println(a.value);\n    }\n}",
     "expectedOutput": "right",
     "quizzes": [
       {
@@ -64,7 +64,7 @@
       {
         "id": "q3",
         "type": "multiple-choice",
-        "answer": 0
+        "answer": 1
       }
     ]
   },
@@ -72,7 +72,7 @@
     "id": "04_spring_di",
     "bin": "04_spring_di",
     "topic": "spring",
-    "code": "@Service\nclass GreetingService(private val repository: GreetingRepository) {\n    fun message(): String = repository.findMessage()\n}\n\nclass GreetingRepository {\n    fun findMessage(): String = \"hello from repo\"\n}\n\nfun main() {\n    val service = GreetingService(GreetingRepository())\n    println(service.message())\n}",
+    "code": "class GreetingRepository {\n    fun findMessage(): String = \"hello from repo\"\n}\n\nclass GreetingService(private val repository: GreetingRepository) {\n    fun message(): String = repository.findMessage()\n}\n\nfun main() {\n    val service = GreetingService(GreetingRepository())\n    println(service.message())\n}",
     "expectedOutput": "hello from repo",
     "quizzes": [
       {
@@ -87,13 +87,36 @@
       {
         "id": "q3",
         "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "05_bean_lifecycle",
+    "bin": "05_bean_lifecycle",
+    "topic": "beans",
+    "code": "class Clock {\n    fun zone(): String = \"UTC\"\n}\n\nfun main() {\n    val clock = Clock()\n    println(clock.zone())\n}",
+    "expectedOutput": "UTC",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
         "answer": 0
       }
     ]
   },
   {
-    "id": "05_web_controller",
-    "bin": "05_web_controller",
+    "id": "06_web_controller",
+    "bin": "06_web_controller",
     "topic": "web",
     "code": "class UserService {\n    fun findName(id: Long): String = \"user-$id\"\n}\n\nclass UserController(private val service: UserService) {\n    fun show(id: Long): String = service.findName(id)\n}\n\nfun main() {\n    val controller = UserController(UserService())\n    println(controller.show(7))\n}",
     "expectedOutput": "user-7",
@@ -115,10 +138,10 @@
     ]
   },
   {
-    "id": "06_jpa_entity",
-    "bin": "06_jpa_entity",
+    "id": "07_jpa_entity",
+    "bin": "07_jpa_entity",
     "topic": "jpa",
-    "code": "@Entity\nclass Member(\n    @Id @GeneratedValue\n    var id: Long? = null,\n    var name: String = \"\",\n)\n\nfun main() {\n    val member = Member(name = \"bean\")\n    println(member.id)\n    println(member.name)\n}",
+    "code": "class Member(var id: Long? = null, var name: String = \"\")\n\nfun main() {\n    val member = Member(name = \"bean\")\n    println(member.id)\n    println(member.name)\n}",
     "expectedOutput": "null\nbean",
     "quizzes": [
       {
@@ -138,8 +161,31 @@
     ]
   },
   {
-    "id": "07_transaction_boundary",
-    "bin": "07_transaction_boundary",
+    "id": "08_lazy_loading",
+    "bin": "08_lazy_loading",
+    "topic": "jpa",
+    "code": "fun main() {\n    val loadedLater = true\n    println(loadedLater)\n}",
+    "expectedOutput": "true",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "09_transaction_boundary",
+    "bin": "09_transaction_boundary",
     "topic": "tx",
     "code": "fun transfer(balance: Int, amount: Int): Int {\n    val afterWithdraw = balance - amount\n    val afterDeposit = afterWithdraw + amount\n    return afterDeposit\n}\n\nfun main() {\n    println(transfer(10, 3))\n}",
     "expectedOutput": "10",
@@ -161,8 +207,31 @@
     ]
   },
   {
-    "id": "08_spring_test",
-    "bin": "08_spring_test",
+    "id": "10_repository_queries",
+    "bin": "10_repository_queries",
+    "topic": "data",
+    "code": "class UserRepository {\n    fun findName(id: Long): String = \"user-$id\"\n}\n\nfun main() {\n    val repository = UserRepository()\n    println(repository.findName(5))\n}",
+    "expectedOutput": "user-5",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 1
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "11_spring_test",
+    "bin": "11_spring_test",
     "topic": "test",
     "code": "class TaxService {\n    fun total(price: Int, rate: Double): Int = (price * (1 + rate)).toInt()\n}\n\nfun main() {\n    val service = TaxService()\n    println(service.total(100, 0.1))\n}",
     "expectedOutput": "110",
@@ -180,6 +249,29 @@
         "id": "q3",
         "type": "multiple-choice",
         "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "12_testcontainers_boundary",
+    "bin": "12_testcontainers_boundary",
+    "topic": "test",
+    "code": "fun main() {\n    val integration = true\n    println(integration)\n}",
+    "expectedOutput": "true",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
       }
     ]
   }
