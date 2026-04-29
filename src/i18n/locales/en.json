@@ -1,0 +1,235 @@
+{
+  "ui": {
+    "appName": "Learning Spring",
+    "lessons": "Lessons",
+    "quizzes": "Quizzes",
+    "search": "Search lessons, topics, or ids",
+    "keyboardHint": "Finish each lesson quiz set to unlock the next lesson.",
+    "heroTitle": "Learn Java, Kotlin, the JVM, JPA, and Spring by reading real code paths.",
+    "heroBody": "This track starts with language syntax and moves into runtime structure, dependency injection, persistence, transactions, and testing. Each lesson keeps the code small and focuses on why the framework behaves that way.",
+    "startLearning": "Start learning",
+    "lessonNotFound": "Lesson not found.",
+    "courseComplete": "Every lesson is complete.",
+    "lessonComplete": "Lesson complete. The next lesson is now unlocked.",
+    "correct": "Correct!",
+    "tryAgain": "Try again",
+    "check": "Check",
+    "predictPlaceholder": "Type the expected output here",
+    "incorrectReasonFallback": "That choice does not match what the code or concept is doing.",
+    "resetCode": "Reset code",
+    "openWorkspace": "Open Kotlin Playground",
+    "workspaceName": "Kotlin Playground",
+    "workspaceFile": "Application.kt",
+    "workspaceNote": "This editor is for reading and tweaking the example. Use the external workspace for full execution and larger experiments.",
+    "output": "Expected output",
+    "outputReady": "Read the code, then verify your answer in the quiz.",
+    "outputPlaceholder": "Output is shown by the lesson metadata below.",
+    "theme": "Theme",
+    "howItWorks1": "Open a lesson and read the explanation next to a focused code sample.",
+    "howItWorks2": "Use the embedded editor to annotate or tweak the snippet while keeping the lesson context nearby.",
+    "howItWorks3": "Finish the quiz set, then continue in the external workspace when you want a larger sandbox.",
+    "previewLabel": "preview",
+    "previewStatus": "Trace the request path from entry point to bean wiring to persistence.",
+    "homeTip": "Use the embedded editor as a scratchpad, then continue in Kotlin Playground or your IDE for a full Spring project.",
+    "howItWorks": "How it works",
+    "lessonList": "Lesson list",
+    "progress": "Progress",
+    "learnByDoing": "Learn by doing"
+  },
+  "topics": {
+    "java": "java",
+    "kotlin": "kotlin",
+    "jvm": "jvm",
+    "spring": "spring",
+    "jpa": "jpa",
+    "web": "web",
+    "tx": "transactions",
+    "test": "testing"
+  },
+  "lessons": {
+    "01_java_main": {
+      "title": "Java Main and Static Entry",
+      "description": "A Java program starts from a `public static void main(String[] args)` method.\n\n```java\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"boot\");\n    }\n}\n```\n\n`public` makes the method accessible, `static` means the JVM can call it without an instance, and `String[] args` receives command-line arguments.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed by this snippet?"
+        },
+        "q2": {
+          "question": "Why is `main` declared `static` here?",
+          "options": [
+            "The JVM needs to call it before any `Main` object exists.",
+            "Static methods are always faster than instance methods.",
+            "Without `static`, Java cannot print to stdout."
+          ],
+          "explanations": [
+            "Correct direction: the entry point must be callable without constructing the class first.",
+            "Performance is not the reason the entry point is static.",
+            "Printing is unrelated to whether the method is static."
+          ],
+          "answerReason": "The entry point is discovered by the JVM before your program creates application objects."
+        }
+      }
+    },
+    "02_kotlin_data_class": {
+      "title": "Kotlin Data Classes",
+      "description": "Kotlin `data class` generates useful methods for state holders.\n\n```kotlin\ndata class User(val name: String, val age: Int)\n```\n\nThe compiler creates `toString()`, `equals()`, `hashCode()`, and `copy()` from the primary constructor properties.",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "question": "What is the main reason to use `data class` here?",
+          "options": [
+            "It generates value-oriented methods from constructor properties.",
+            "It makes the object mutable by default.",
+            "It automatically registers the class as a Spring bean."
+          ],
+          "explanations": [
+            "Yes. `data class` is about value semantics and compiler-generated helpers.",
+            "Mutability comes from `var` versus `val`, not from `data class` itself.",
+            "Spring bean registration is separate from Kotlin language features."
+          ],
+          "answerReason": "Use `data class` when the type mainly represents data and equality should depend on its fields."
+        }
+      }
+    },
+    "03_jvm_memory": {
+      "title": "Stack Frames and Heap Objects",
+      "description": "A local reference lives in a stack frame, while the object it points to is typically on the heap.\n\n```java\nString name = new String(\"bean\");\n```\n\nThe reference variable and the object are not the same thing. That distinction matters for GC, aliasing, and mutation through shared references.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why does changing `b.value` affect `a.value`?",
+          "options": [
+            "Both variables refer to the same object instance.",
+            "Java silently copies all object fields between variables.",
+            "The JVM rewrites both names into one variable during compilation."
+          ],
+          "explanations": [
+            "Yes. `a` and `b` are two references to one heap object.",
+            "Java does not deep-copy objects on assignment.",
+            "Compilation does not merge variable names like that."
+          ],
+          "answerReason": "Assignment of object references copies the reference, not the object itself."
+        }
+      }
+    },
+    "04_spring_di": {
+      "title": "Constructor Injection",
+      "description": "Spring prefers constructor injection because dependencies become explicit and the object can start fully initialized.\n\n```java\n@Service\nclass OrderService {\n    private final PaymentClient paymentClient;\n\n    OrderService(PaymentClient paymentClient) {\n        this.paymentClient = paymentClient;\n    }\n}\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "question": "Why is constructor injection usually preferred over field injection?",
+          "options": [
+            "It makes required dependencies explicit and easier to test.",
+            "It lets Spring skip bean creation until the method is called.",
+            "It removes the need for interfaces in Java."
+          ],
+          "explanations": [
+            "Correct. Constructor injection is explicit and works well with immutability and tests.",
+            "Lazy creation is a different mechanism.",
+            "Interfaces are unrelated to field versus constructor injection."
+          ],
+          "answerReason": "If an object cannot work without a dependency, the constructor is the clearest place to require it."
+        }
+      }
+    },
+    "05_web_controller": {
+      "title": "Controller to Service Flow",
+      "description": "A controller should stay thin. It receives the HTTP request, delegates business logic to a service, and returns a response.\n\n```java\n@GetMapping(\"/users/{id}\")\nUserResponse get(@PathVariable Long id) {\n    return service.find(id);\n}\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "What is the better responsibility split?",
+          "options": [
+            "Controller handles transport details; service owns business logic.",
+            "Controller should contain all SQL because it sees request parameters first.",
+            "Service should parse HTTP annotations directly."
+          ],
+          "explanations": [
+            "Yes. Keep transport and domain logic separated.",
+            "Putting SQL in controllers creates coupling and poor test boundaries.",
+            "HTTP annotation parsing belongs to the web layer, not the service layer."
+          ],
+          "answerReason": "Thin controllers scale better because business rules remain reusable outside one endpoint."
+        }
+      }
+    },
+    "06_jpa_entity": {
+      "title": "JPA Entity Identity",
+      "description": "A JPA entity represents a row identity over time. Its lifecycle matters more than just its current field values.\n\n```java\n@Entity\nclass Member {\n    @Id @GeneratedValue\n    Long id;\n}\n```\n\nAn entity changes state from transient to managed to detached depending on the persistence context.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed before persistence assigns an id?"
+        },
+        "q2": {
+          "question": "Why is entity identity important in JPA?",
+          "options": [
+            "The persistence context tracks one managed instance per database identity.",
+            "Entities are just DTOs with extra annotations, so identity does not matter.",
+            "Identity only matters for native SQL, not ORM."
+          ],
+          "explanations": [
+            "Correct. JPA uses identity to manage change tracking and caching.",
+            "Entities have lifecycle and identity semantics beyond DTOs.",
+            "Identity is core to ORM behavior too."
+          ],
+          "answerReason": "If two objects claim the same row identity, the persistence context needs a consistent managed instance."
+        }
+      }
+    },
+    "07_transaction_boundary": {
+      "title": "Transaction Boundaries",
+      "description": "A transaction should wrap a unit of work that must succeed or fail together.\n\n```java\n@Transactional\npublic void transfer(...) {\n    withdraw();\n    deposit();\n}\n```\n\nWithout one boundary, partial writes can escape when an error happens in the middle.",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why is `@Transactional` used around related writes?",
+          "options": [
+            "To keep the unit of work atomic if one step fails.",
+            "To make methods public automatically.",
+            "To avoid creating any JDBC connections."
+          ],
+          "explanations": [
+            "Yes. The goal is atomicity and consistent state.",
+            "Visibility is unrelated to transactions.",
+            "Transactions do not remove the need for database connections."
+          ],
+          "answerReason": "Atomicity matters when multiple updates must either all commit or all roll back."
+        }
+      }
+    },
+    "08_spring_test": {
+      "title": "Slice Tests and Fast Feedback",
+      "description": "Not every test needs the full application context. Slice tests load only the layer you care about and keep feedback fast.\n\n```java\n@WebMvcTest(UserController.class)\nclass UserControllerTest { }\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is printed?"
+        },
+        "q2": {
+          "question": "Why use a slice test such as `@WebMvcTest`?",
+          "options": [
+            "It narrows the loaded context to the web layer for faster, focused tests.",
+            "It automatically tests the real database transaction log.",
+            "It replaces assertions with Spring-generated checks."
+          ],
+          "explanations": [
+            "Correct. Slice tests reduce scope and speed up feedback.",
+            "A web slice test does not load the full database stack by default.",
+            "You still write assertions yourself."
+          ],
+          "answerReason": "Focused tests fail for one reason and run quickly enough to stay in the normal workflow."
+        }
+      }
+    }
+  }
+}
