@@ -6,7 +6,7 @@
     "search": "Search lessons, topics, or ids",
     "keyboardHint": "Finish each lesson quiz set to unlock the next lesson.",
     "heroTitle": "Learn Java, Kotlin, the JVM, JPA, and Spring by reading real code paths.",
-    "heroBody": "This track now covers more than syntax and DI. It moves through the JVM, bean creation, request flow, JPA identity, lazy loading, transaction boundaries, and testing patterns so the Spring stack feels like a system rather than a list of annotations.",
+    "heroBody": "This track covers Java and Kotlin foundations relevant to Spring, JVM object behavior, bean creation, MVC flow, validation, JPA mappings, transaction boundaries, security, caching, messaging, and testing layers. The goal is to learn Spring as a stack rather than as a list of annotations.",
     "startLearning": "Start learning",
     "lessonNotFound": "Lesson not found.",
     "courseComplete": "Every lesson is complete.",
@@ -29,7 +29,7 @@
     "howItWorks2": "Use the embedded editor to annotate or tweak the snippet while keeping the lesson context nearby.",
     "howItWorks3": "Finish the quiz set, then continue in the external workspace when you want a larger sandbox.",
     "previewLabel": "preview",
-    "previewStatus": "Follow the path from language basics through container wiring, persistence behavior, and transaction boundaries.",
+    "previewStatus": "Move from entry points and DI through MVC, persistence, transactions, security, and operational boundaries.",
     "homeTip": "Use the embedded editor as a scratchpad, then continue in Kotlin Playground or your IDE for a full Spring project.",
     "howItWorks": "How it works",
     "lessonList": "Lesson list",
@@ -46,7 +46,11 @@
     "jpa": "jpa",
     "tx": "transactions",
     "data": "data access",
-    "test": "testing"
+    "test": "testing",
+    "validation": "validation",
+    "security": "security",
+    "cache": "caching",
+    "messaging": "messaging"
   },
   "lessons": {
     "01_java_main": {
@@ -490,6 +494,221 @@
             "They often require even more configuration awareness."
           ],
           "answerReason": "Use integration tests deliberately for seam validation, not as the only testing strategy."
+        }
+      }
+    },
+    "13_transaction_isolation": {
+      "title": "Transaction Isolation and Concurrency",
+      "description": "Transactions are not only about atomicity; isolation levels affect what concurrent work can observe of each other.\n\n```text\nconcurrent transactions -> visibility rules -> anomalies or guarantees\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "id": "q2",
+          "type": "multiple-choice",
+          "answer": 0,
+          "question": "Why does transaction isolation matter?",
+          "options": [
+            "Because concurrent transactions may otherwise observe or interfere with each other in surprising ways.",
+            "Because isolation changes Kotlin syntax.",
+            "Because it removes the need for indexes."
+          ],
+          "explanations": [
+            "Correct. Concurrency anomalies are a transaction concern.",
+            "Language syntax is unrelated.",
+            "Indexes are separate."
+          ],
+          "answerReason": "Transactional correctness includes what concurrent units of work can see of one another."
+        },
+        "q3": {
+          "id": "q3",
+          "type": "multiple-choice",
+          "answer": 1,
+          "question": "What is the tradeoff around stronger isolation?",
+          "options": [
+            "It always improves performance.",
+            "It may improve correctness guarantees while also increasing contention or cost.",
+            "It disables persistence entirely."
+          ],
+          "explanations": [
+            "Stronger isolation can add cost.",
+            "Correct. Stronger guarantees often come with coordination overhead.",
+            "Persistence still exists."
+          ],
+          "answerReason": "Database guarantees are usually a tradeoff between correctness strength and concurrency cost."
+        }
+      }
+    },
+    "14_validation_boundary": {
+      "title": "Validation at the Boundary",
+      "description": "Input validation checks whether incoming data satisfies application rules before deeper processing. Boundary validation narrows the set of states inner layers must handle.",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "id": "q2",
+          "type": "multiple-choice",
+          "answer": 0,
+          "question": "Why validate input near the request boundary?",
+          "options": [
+            "To reject malformed or invalid data before deeper layers assume it is trustworthy.",
+            "To make persistence unnecessary.",
+            "To avoid ever writing tests."
+          ],
+          "explanations": [
+            "Correct. Validation protects deeper logic from bad assumptions.",
+            "Persistence is unrelated.",
+            "Validation does not replace testing."
+          ],
+          "answerReason": "Boundary validation narrows the set of states inner layers must handle."
+        },
+        "q3": {
+          "id": "q3",
+          "type": "multiple-choice",
+          "answer": 2,
+          "question": "Why separate transport validation from deeper business rules?",
+          "options": [
+            "Because validation only matters in static websites.",
+            "Because business logic should never inspect any input.",
+            "Because transport-format checks and domain rules are related but not always owned by the same layer."
+          ],
+          "explanations": [
+            "Validation matters broadly.",
+            "Business logic still depends on valid inputs.",
+            "Correct. Different layers may own different kinds of correctness checks."
+          ],
+          "answerReason": "Not every rule belongs in the same layer just because both are called validation."
+        }
+      }
+    },
+    "15_security_filters": {
+      "title": "Security Filters and Request Protection",
+      "description": "Security is often enforced by filters or middleware before the application reaches business endpoints.\n\n```text\nrequest -> security filter chain -> controller\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "id": "q2",
+          "type": "multiple-choice",
+          "answer": 1,
+          "question": "Why is security often implemented in request filters or middleware?",
+          "options": [
+            "Because controllers cannot read headers.",
+            "Because authentication and authorization are cross-cutting concerns that should apply consistently before business logic runs.",
+            "Because security removes the need for user models."
+          ],
+          "explanations": [
+            "Controllers can read headers.",
+            "Correct. Security is a boundary concern that should be applied consistently.",
+            "User models may still matter."
+          ],
+          "answerReason": "Access control belongs near the request boundary, not sprinkled through business code."
+        },
+        "q3": {
+          "id": "q3",
+          "type": "multiple-choice",
+          "answer": 0,
+          "question": "What is a danger of ad hoc security checks scattered through controllers?",
+          "options": [
+            "Inconsistent protection and missed paths can appear as the codebase grows.",
+            "The JVM stops authenticating users.",
+            "Annotations stop existing."
+          ],
+          "explanations": [
+            "Correct. Security that is not centralized is easier to forget or misapply.",
+            "The JVM does not authenticate users for you.",
+            "Annotations still exist."
+          ],
+          "answerReason": "Cross-cutting concerns are risky when every endpoint must remember them manually."
+        }
+      }
+    },
+    "16_caching_basic": {
+      "title": "Caching and Stale Data Tradeoffs",
+      "description": "Caching can reduce repeated expensive work, but it introduces freshness and invalidation problems.\n\n```text\nsource of truth -> cache -> readers\n```",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "id": "q2",
+          "type": "multiple-choice",
+          "answer": 2,
+          "question": "Why use caching in an application stack?",
+          "options": [
+            "To eliminate all state.",
+            "To avoid every database forever.",
+            "To reuse expensive results and reduce repeated load on slower components."
+          ],
+          "explanations": [
+            "Caching does not eliminate state.",
+            "Databases still exist.",
+            "Correct. Caching is a performance tool for repeated work."
+          ],
+          "answerReason": "Caching is often about shifting load and latency, not deleting the original source of truth."
+        },
+        "q3": {
+          "id": "q3",
+          "type": "multiple-choice",
+          "answer": 1,
+          "question": "What is the hardest part of caching conceptually?",
+          "options": [
+            "Writing `if` statements.",
+            "Keeping cached data coherent enough with the source of truth as data changes.",
+            "Compiling the project."
+          ],
+          "explanations": [
+            "Branching syntax is easy compared with coherence.",
+            "Correct. Invalidation and freshness rules are the hard part.",
+            "Compilation is unrelated."
+          ],
+          "answerReason": "Caching is valuable precisely because correctness and freshness are not free."
+        }
+      }
+    },
+    "17_messaging_async": {
+      "title": "Messaging and Async Boundaries",
+      "description": "Queues and message brokers let parts of a system communicate asynchronously and decouple request-time work from later processing.",
+      "quizzes": {
+        "q1": {
+          "question": "What is the output?"
+        },
+        "q2": {
+          "id": "q2",
+          "type": "multiple-choice",
+          "answer": 0,
+          "question": "Why use messaging between parts of a system?",
+          "options": [
+            "To decouple producers and consumers in time and smooth certain workloads asynchronously.",
+            "To remove all failure handling.",
+            "To make databases unnecessary."
+          ],
+          "explanations": [
+            "Correct. Messaging is often about decoupling and asynchronous coordination.",
+            "Failure handling still matters.",
+            "Data stores may still be needed."
+          ],
+          "answerReason": "Asynchronous boundaries help when immediate synchronous coupling is too rigid or too expensive."
+        },
+        "q3": {
+          "id": "q3",
+          "type": "multiple-choice",
+          "answer": 2,
+          "question": "What is a common tradeoff when introducing messaging?",
+          "options": [
+            "Everything becomes strictly simpler.",
+            "You get synchronous request/response semantics everywhere.",
+            "You gain decoupling, but also introduce eventual consistency and operational complexity."
+          ],
+          "explanations": [
+            "Distributed systems usually do not become simpler automatically.",
+            "Messaging is often used because you do not want synchronous coupling everywhere.",
+            "Correct. Decoupling and complexity often come together."
+          ],
+          "answerReason": "Asynchronous architecture shifts when and how consistency is achieved."
         }
       }
     }

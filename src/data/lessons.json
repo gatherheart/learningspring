@@ -274,5 +274,120 @@
         "answer": 0
       }
     ]
+  },
+  {
+    "id": "13_transaction_isolation",
+    "bin": "13_transaction_isolation",
+    "topic": "tx",
+    "code": "fun main() {\n    val isolation = 4\n    println(isolation)\n}",
+    "expectedOutput": "4",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "14_validation_boundary",
+    "bin": "14_validation_boundary",
+    "topic": "validation",
+    "code": "fun main() {\n    val valid = false\n    println(valid)\n}",
+    "expectedOutput": "false",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
+  },
+  {
+    "id": "15_security_filters",
+    "bin": "15_security_filters",
+    "topic": "security",
+    "code": "fun main() {\n    val authorized = false\n    println(authorized)\n}",
+    "expectedOutput": "false",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 1
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "16_caching_basic",
+    "bin": "16_caching_basic",
+    "topic": "cache",
+    "code": "fun main() {\n    val hits = 3\n    println(hits)\n}",
+    "expectedOutput": "3",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 2
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "17_messaging_async",
+    "bin": "17_messaging_async",
+    "topic": "messaging",
+    "code": "fun main() {\n    val queued = true\n    println(queued)\n}",
+    "expectedOutput": "true",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
   }
 ]
