@@ -1,0 +1,186 @@
+[
+  {
+    "id": "01_java_main",
+    "bin": "01_java_main",
+    "topic": "java",
+    "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"boot\");\n        System.out.println(args.length);\n    }\n}",
+    "expectedOutput": "boot\n0",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "02_kotlin_data_class",
+    "bin": "02_kotlin_data_class",
+    "topic": "kotlin",
+    "code": "data class User(val name: String, val age: Int)\n\nfun main() {\n    val user = User(\"Ada\", 33)\n    println(user)\n    println(user.copy(age = 34))\n}",
+    "expectedOutput": "User(name=Ada, age=33)\nUser(name=Ada, age=34)",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
+  },
+  {
+    "id": "03_jvm_memory",
+    "bin": "03_jvm_memory",
+    "topic": "jvm",
+    "code": "public class Main {\n    static class Box {\n        String value;\n        Box(String value) {\n            this.value = value;\n        }\n    }\n\n    public static void main(String[] args) {\n        Box a = new Box(\"left\");\n        Box b = a;\n        b.value = \"right\";\n        System.out.println(a.value);\n    }\n}",
+    "expectedOutput": "right",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "04_spring_di",
+    "bin": "04_spring_di",
+    "topic": "spring",
+    "code": "@Service\nclass GreetingService(private val repository: GreetingRepository) {\n    fun message(): String = repository.findMessage()\n}\n\nclass GreetingRepository {\n    fun findMessage(): String = \"hello from repo\"\n}\n\nfun main() {\n    val service = GreetingService(GreetingRepository())\n    println(service.message())\n}",
+    "expectedOutput": "hello from repo",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 0
+      }
+    ]
+  },
+  {
+    "id": "05_web_controller",
+    "bin": "05_web_controller",
+    "topic": "web",
+    "code": "class UserService {\n    fun findName(id: Long): String = \"user-$id\"\n}\n\nclass UserController(private val service: UserService) {\n    fun show(id: Long): String = service.findName(id)\n}\n\nfun main() {\n    val controller = UserController(UserService())\n    println(controller.show(7))\n}",
+    "expectedOutput": "user-7",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
+  },
+  {
+    "id": "06_jpa_entity",
+    "bin": "06_jpa_entity",
+    "topic": "jpa",
+    "code": "@Entity\nclass Member(\n    @Id @GeneratedValue\n    var id: Long? = null,\n    var name: String = \"\",\n)\n\nfun main() {\n    val member = Member(name = \"bean\")\n    println(member.id)\n    println(member.name)\n}",
+    "expectedOutput": "null\nbean",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  },
+  {
+    "id": "07_transaction_boundary",
+    "bin": "07_transaction_boundary",
+    "topic": "tx",
+    "code": "fun transfer(balance: Int, amount: Int): Int {\n    val afterWithdraw = balance - amount\n    val afterDeposit = afterWithdraw + amount\n    return afterDeposit\n}\n\nfun main() {\n    println(transfer(10, 3))\n}",
+    "expectedOutput": "10",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 2
+      }
+    ]
+  },
+  {
+    "id": "08_spring_test",
+    "bin": "08_spring_test",
+    "topic": "test",
+    "code": "class TaxService {\n    fun total(price: Int, rate: Double): Int = (price * (1 + rate)).toInt()\n}\n\nfun main() {\n    val service = TaxService()\n    println(service.total(100, 0.1))\n}",
+    "expectedOutput": "110",
+    "quizzes": [
+      {
+        "id": "q1",
+        "type": "predict-output"
+      },
+      {
+        "id": "q2",
+        "type": "multiple-choice",
+        "answer": 0
+      },
+      {
+        "id": "q3",
+        "type": "multiple-choice",
+        "answer": 1
+      }
+    ]
+  }
+]

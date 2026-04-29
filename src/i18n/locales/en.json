@@ -67,6 +67,20 @@
             "Printing is unrelated to whether the method is static."
           ],
           "answerReason": "The entry point is discovered by the JVM before your program creates application objects."
+        },
+        "q3": {
+          "question": "What does `String[] args` represent in `main`?",
+          "options": [
+            "A list of every class loaded by the JVM.",
+            "The command-line arguments passed to the program.",
+            "The fields declared on the `Main` class."
+          ],
+          "explanations": [
+            "Class loading metadata is not passed through `args`.",
+            "Yes. `args` is the argument array supplied when the process starts.",
+            "Class fields are unrelated to the `main` parameter list."
+          ],
+          "answerReason": "The JVM calls `main` with whatever strings were passed on the command line."
         }
       }
     },
@@ -90,6 +104,20 @@
             "Spring bean registration is separate from Kotlin language features."
           ],
           "answerReason": "Use `data class` when the type mainly represents data and equality should depend on its fields."
+        },
+        "q3": {
+          "question": "Which generated feature is most useful when you want a modified copy of an immutable object?",
+          "options": [
+            "`hashCode()`",
+            "`componentN()`",
+            "`copy()`"
+          ],
+          "explanations": [
+            "`hashCode()` supports hashing and equality-related collections, not cloning with changes.",
+            "`componentN()` supports destructuring, not constructing a changed instance.",
+            "Correct. `copy()` creates a new instance while letting you override selected properties."
+          ],
+          "answerReason": "`copy()` is what makes small immutable updates ergonomic in Kotlin data models."
         }
       }
     },
@@ -113,6 +141,20 @@
             "Compilation does not merge variable names like that."
           ],
           "answerReason": "Assignment of object references copies the reference, not the object itself."
+        },
+        "q3": {
+          "question": "What is actually copied by `Box b = a;` in this example?",
+          "options": [
+            "The reference value, not the heap object itself.",
+            "A brand-new heap object with all fields duplicated.",
+            "Only the `value` field, but not the rest of the object."
+          ],
+          "explanations": [
+            "Correct. Both variables end up pointing at the same object instance.",
+            "Assignment of object references does not clone the object automatically.",
+            "Java does not do partial object copying on simple assignment."
+          ],
+          "answerReason": "Reference assignment aliases one object; it does not construct another object for you."
         }
       }
     },
@@ -136,6 +178,20 @@
             "Interfaces are unrelated to field versus constructor injection."
           ],
           "answerReason": "If an object cannot work without a dependency, the constructor is the clearest place to require it."
+        },
+        "q3": {
+          "question": "Why does constructor injection fit immutable service design well?",
+          "options": [
+            "Dependencies can be required once at construction and stored in final fields.",
+            "It allows Spring to ignore missing dependencies safely.",
+            "It makes beans run without being registered in the container."
+          ],
+          "explanations": [
+            "Yes. Constructor injection pairs naturally with explicit, non-null, fixed dependencies.",
+            "Missing required dependencies are still configuration errors.",
+            "Spring still needs to create and manage the bean normally."
+          ],
+          "answerReason": "If a service cannot work without a collaborator, the constructor is the cleanest place to enforce that contract."
         }
       }
     },
@@ -159,6 +215,20 @@
             "HTTP annotation parsing belongs to the web layer, not the service layer."
           ],
           "answerReason": "Thin controllers scale better because business rules remain reusable outside one endpoint."
+        },
+        "q3": {
+          "question": "What usually belongs in the controller rather than the service?",
+          "options": [
+            "The core business rule for calculating totals.",
+            "The persistence mapping for a JPA entity.",
+            "HTTP-specific concerns like path variables and response status."
+          ],
+          "explanations": [
+            "Business rules are usually more reusable when they live in a service layer.",
+            "Entity mapping belongs to the persistence model, not the controller.",
+            "Correct. Controllers are the transport boundary where HTTP details are handled."
+          ],
+          "answerReason": "Controllers should translate web requests into service calls and translate service results back into HTTP responses."
         }
       }
     },
@@ -182,6 +252,20 @@
             "Identity is core to ORM behavior too."
           ],
           "answerReason": "If two objects claim the same row identity, the persistence context needs a consistent managed instance."
+        },
+        "q3": {
+          "question": "What changes when an entity becomes managed by the persistence context?",
+          "options": [
+            "It stops having an identifier.",
+            "JPA begins tracking changes on that instance for flush/commit.",
+            "It can no longer be compared by identity."
+          ],
+          "explanations": [
+            "Managed entities still keep their identity; that is central to tracking them.",
+            "Correct. A managed entity is associated with a persistence context that observes updates.",
+            "Identity remains important; it does not disappear after persistence begins managing the object."
+          ],
+          "answerReason": "Managed means the ORM is now watching that entity instance as part of the unit of work."
         }
       }
     },
@@ -205,6 +289,20 @@
             "Transactions do not remove the need for database connections."
           ],
           "answerReason": "Atomicity matters when multiple updates must either all commit or all roll back."
+        },
+        "q3": {
+          "question": "What failure does a transaction primarily protect against in multi-step writes?",
+          "options": [
+            "Typos in Java variable names.",
+            "The JVM loading classes in the wrong order.",
+            "A partial commit where early writes escape before a later step fails."
+          ],
+          "explanations": [
+            "Transactions do not address source-level typing mistakes.",
+            "Class loading is unrelated to transactional integrity.",
+            "Correct. The boundary is there so related changes succeed or fail together."
+          ],
+          "answerReason": "Without a transaction, one update may persist even though the whole business action should have failed."
         }
       }
     },
@@ -228,6 +326,20 @@
             "You still write assertions yourself."
           ],
           "answerReason": "Focused tests fail for one reason and run quickly enough to stay in the normal workflow."
+        },
+        "q3": {
+          "question": "Why are focused tests valuable even when you also have full integration tests?",
+          "options": [
+            "They replace the need for integration tests completely.",
+            "They isolate one layer and fail faster with a narrower cause.",
+            "They guarantee every Spring bean is loaded."
+          ],
+          "explanations": [
+            "Focused tests help, but they do not eliminate the need for broader coverage.",
+            "Correct. Narrow scope keeps feedback quick and the reason for failure easier to see.",
+            "A slice test intentionally does not load every bean."
+          ],
+          "answerReason": "Good test pyramids use faster, narrower tests to catch many issues before the full application needs to start."
         }
       }
     }
